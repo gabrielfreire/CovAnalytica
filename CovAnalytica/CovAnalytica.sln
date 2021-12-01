@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.31911.260
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CovAnalytica.Server", "Server\CovAnalytica.Server.csproj", "{16A116D9-6C0C-4FBA-A90F-3145FA7BF715}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CovAnalytica.Client", "Client\CovAnalytica.Client.csproj", "{3FAD7F33-72CD-4531-A477-31EF4A0AC14A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CovAnalytica.Shared", "Shared\CovAnalytica.Shared.csproj", "{7CA2E946-544A-4CDB-B7B4-03660CAC8EA2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{5EB1BE6C-9889-4EBC-B090-AB3DEBE964D0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0B6603E3-1FE4-4E29-9AD3-144669DEF183}"
+	ProjectSection(SolutionItems) = preProject
+		database_migrate.ps1 = database_migrate.ps1
+		database_update.ps1 = database_update.ps1
+		database_update_tests.ps1 = database_update_tests.ps1
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16A116D9-6C0C-4FBA-A90F-3145FA7BF715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16A116D9-6C0C-4FBA-A90F-3145FA7BF715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16A116D9-6C0C-4FBA-A90F-3145FA7BF715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16A116D9-6C0C-4FBA-A90F-3145FA7BF715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FAD7F33-72CD-4531-A477-31EF4A0AC14A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FAD7F33-72CD-4531-A477-31EF4A0AC14A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FAD7F33-72CD-4531-A477-31EF4A0AC14A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FAD7F33-72CD-4531-A477-31EF4A0AC14A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CA2E946-544A-4CDB-B7B4-03660CAC8EA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CA2E946-544A-4CDB-B7B4-03660CAC8EA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CA2E946-544A-4CDB-B7B4-03660CAC8EA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CA2E946-544A-4CDB-B7B4-03660CAC8EA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EB1BE6C-9889-4EBC-B090-AB3DEBE964D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EB1BE6C-9889-4EBC-B090-AB3DEBE964D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EB1BE6C-9889-4EBC-B090-AB3DEBE964D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EB1BE6C-9889-4EBC-B090-AB3DEBE964D0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2D7E4140-E34E-4A39-8E0A-F081EB758C4E}
+	EndGlobalSection
+EndGlobal
