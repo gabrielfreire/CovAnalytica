@@ -9,7 +9,7 @@ namespace CovAnalytica.Shared.Interfaces
 {
     public interface IVaersDataQueryService
     {
-        Task<List<VaersVaxAdverseEvent>> ListVaxAdverseEventsWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent);
+        Task<List<dynamic>> ListVaxAdverseEventsWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent);
         Task<List<string>> ListEventCategoriesAsync();
         Task<List<string>> ListVaccineTypesAsync();
         Task<List<string>> ListVaccineManufacturersAsync();

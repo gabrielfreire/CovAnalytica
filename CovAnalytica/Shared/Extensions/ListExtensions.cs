@@ -78,14 +78,14 @@ namespace CovAnalytica.Shared.Extensions
             return _queryable.ToList();
         }
 
-        public static IQueryable<T> BuildQuery<T>(
+        public static IQueryable BuildQuery<T>(
             this List<T> list, 
             List<PropertyInformation> propertyInformations,
             List<string> selects,
             bool orderByAscendent,
             int skip = 0, int count = 0)
         {
-            var _queryable = list.AsQueryable();
+            var _queryable = (IQueryable) list.AsQueryable();
             if (_queryable.Any())
             {
 
@@ -94,7 +94,7 @@ namespace CovAnalytica.Shared.Extensions
 
                 foreach (var property in propertyInformations)
                 {
-                    if (property.Value == null)
+                    if (property.Value == null || property.Name.ToLower() == "selects")
                         continue;
 
                     if (_criteriasSb.Length > 0)
@@ -119,19 +119,26 @@ namespace CovAnalytica.Shared.Extensions
                     _queryable = _queryable.Where(_criteriasSb.ToString());
                 }
 
-                if (orderByAscendent)
+                if (typeof(T).GetProperty("Date") != null)
                 {
-                    _queryable = _queryable.OrderBy("it.Date");
-                }
-                else
-                {
-                    _queryable = _queryable.OrderByDescending(it => "it.Date");
+                    if (orderByAscendent)
+                    {
+                        _queryable = _queryable.OrderBy("it.Date ASC");
+                    }
+                    else
+                    {
+                        _queryable = _queryable.OrderBy("it.Date DESC");
+                    }
                 }
 
                 _queryable = _queryable.Skip(skip);
 
                 if (count > 0)
                     _queryable = _queryable.Take(count);
+
+                if (_selectSb.Length > 0)
+                    _queryable = _queryable.Select(_selectSb.ToString());
+                
 
             }
             return _queryable;

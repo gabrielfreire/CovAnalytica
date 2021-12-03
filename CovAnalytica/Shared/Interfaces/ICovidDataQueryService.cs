@@ -9,7 +9,7 @@ namespace CovAnalytica.Shared.Interfaces
 {
     public interface ICovidDataQueryService
     {
-        Task<List<SelectionCovidData>> ListTotalsPerCountryWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent);
-        Task<List<CompleteCovidData>> ListTimeseriesDataWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent);
+        Task<List<dynamic>> ListTotalsPerCountryWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent);
+        Task<List<dynamic>> ListTimeseriesDataWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent);
     }
 }

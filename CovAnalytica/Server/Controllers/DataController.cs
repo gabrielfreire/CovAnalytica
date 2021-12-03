@@ -23,6 +23,7 @@ namespace CovAnalytica.Server.Controllers
         [Produces("application/json")]
         [Route("timeseries-covid-data")]
         public async Task<ActionResult> ListTimeseriesCovidData(
+            [FromQuery] string? selects,
             [FromQuery] string? Continent,
             [FromQuery] string? Location,
             [FromQuery] int? skip = 0,
@@ -37,6 +38,7 @@ namespace CovAnalytica.Server.Controllers
         [Produces("application/json")]
         [Route("totals-per-country")]
         public async Task<ActionResult> ListTotalsPerCountryCovidData(
+            [FromQuery] string? selects,
             [FromQuery] string? Continent,
             [FromQuery] string? Location,
             [FromQuery] int? skip = 0,
@@ -51,6 +53,7 @@ namespace CovAnalytica.Server.Controllers
         [Produces("application/json")]
         [Route("vaers-vax-adverse-events")]
         public async Task<ActionResult> ListVaersVaxAdverseEventsData(
+            [FromQuery] string? selects,
             [FromQuery] string? vaccineType,
             [FromQuery] string? vaccineManufacturer,
             [FromQuery] string? vaccineDose,

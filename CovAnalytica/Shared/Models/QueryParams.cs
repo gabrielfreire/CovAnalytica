@@ -27,7 +27,7 @@ namespace CovAnalytica.Shared.Models
                     case "count":
                         _queryParams.Count = int.Parse(query.Item2);
                         break;
-                    case "select":
+                    case "selects":
                         if (!string.IsNullOrWhiteSpace(query.Item2))
                         {
                             var _columns = query.Item2.Split(',');

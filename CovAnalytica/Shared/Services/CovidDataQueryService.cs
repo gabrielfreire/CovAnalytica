@@ -24,36 +24,36 @@ namespace CovAnalytica.Shared.Services
             _selectionCovidDataMemoryStorage = selectionCovidDataMemoryStorage;
         }
 
-        public Task<List<CompleteCovidData>> ListTimeseriesDataWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent)
+        public Task<List<dynamic>> ListTimeseriesDataWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent)
         {
             return _searchComplete(queryParams, orderByAscendent, queryParams.Skip, queryParams.Count);
         }
 
-        public Task<List<SelectionCovidData>> ListTotalsPerCountryWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent)
+        public Task<List<dynamic>> ListTotalsPerCountryWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent)
         {
             return _searchSelection(queryParams, orderByAscendent, queryParams.Skip, queryParams.Count);
         }
 
-        private async Task<List<CompleteCovidData>> _searchComplete(QueryParams queryParams, bool orderByAscendent, int skip=0, int count=0)
+        private async Task<List<dynamic>> _searchComplete(QueryParams queryParams, bool orderByAscendent, int skip=0, int count=0)
         {
             if (await _completeCovidDataMemoryStorage.HasDataBeenLoaded())
             {
                 var _list = await _completeCovidDataMemoryStorage.GetAll();
                 var _queryable = _list.BuildQuery(queryParams.GetPropertiesInformation(), queryParams.SelectList, orderByAscendent, skip, count);
-                return _queryable.ToList();
+                return _queryable.ToDynamicList();
             }
-            return new List<CompleteCovidData>();
+            return new List<dynamic>();
         }
 
-        private async Task<List<SelectionCovidData>> _searchSelection(QueryParams queryParams, bool orderByAscendent, int skip=0, int count=0)
+        private async Task<List<dynamic>> _searchSelection(QueryParams queryParams, bool orderByAscendent, int skip=0, int count=0)
         {
             if (await _selectionCovidDataMemoryStorage.HasDataBeenLoaded())
             {
                 var _list = await _selectionCovidDataMemoryStorage.GetAll();
                 var _queryable = _list.BuildQuery(queryParams.GetPropertiesInformation(), queryParams.SelectList, orderByAscendent, skip, count);
-                return _queryable.ToList();
+                return _queryable.ToDynamicList();
             }
-            return new List<SelectionCovidData>();
+            return new List<dynamic>();
         }
 
         
