@@ -19,7 +19,7 @@ namespace Tests.Services
         private IMemoryStorage<CompleteCovidData>? _timeseriesCovidDataMemoryStorage;
         private IMemoryStorage<SelectionCovidData>? _totalsPerCountryCovidDataMemoryStorage;
         private IGithubService? _githubService;
-        private ICovidDataCSVService? _csvService;
+        private ICSVService? _csvService;
 
         ICollection<CompleteCovidData>? _timeseriesCovidData;
         ICollection<SelectionCovidData>? _totalsPerCountryCovidData;
@@ -28,7 +28,7 @@ namespace Tests.Services
         public void Setup()
         {
             _githubService = _scopeFactory?.CreateScope().ServiceProvider.GetService<IGithubService>();
-            _csvService = _scopeFactory?.CreateScope().ServiceProvider.GetService<ICovidDataCSVService>();
+            _csvService = _scopeFactory?.CreateScope().ServiceProvider.GetService<ICSVService>();
             _timeseriesCovidDataMemoryStorage = _scopeFactory?.CreateScope().ServiceProvider.GetService<IMemoryStorage<CompleteCovidData>>();
             _totalsPerCountryCovidDataMemoryStorage = _scopeFactory?.CreateScope().ServiceProvider.GetService<IMemoryStorage<SelectionCovidData>>();
         }

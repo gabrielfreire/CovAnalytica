@@ -29,6 +29,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddApplicationServices(builder.Configuration);
 
+builder.Logging.AddConfiguration(builder.Configuration);
+builder.Logging.AddConsole();
+builder.Logging.AddFilter("Microsoft.EntityFramework.Database.Command", LogLevel.Warning);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

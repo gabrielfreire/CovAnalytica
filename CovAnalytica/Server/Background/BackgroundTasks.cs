@@ -10,12 +10,12 @@ namespace CovAnalytica.Server.Background
         private TimeSpan _interval = TimeSpan.FromHours(24);
 
         private IGithubService _githubService;
-        private ICovidDataCSVService _covidDataService;
+        private ICSVService _covidDataService;
         private IServiceProvider _serviceProvider;
 
         public BackgroundTasks(
             IGithubService githubService,
-            ICovidDataCSVService covidDataService,
+            ICSVService covidDataService,
             IServiceProvider serviceProvider)
         {
             _githubService = githubService;
@@ -55,23 +55,32 @@ namespace CovAnalytica.Server.Background
             {
                 if (await _dbRepository.IsItTimeToUpdate())
                 {
-                    // get csv string
-                    var _csvString = await _githubService.GetFileAsStringAsync(Constants.COMPLETE_COVID_DATA_URL_PATH);
+                    Util.LogInformation("It is time for an update");
 
-                    // create csv object
-                    var _csvObject = await _covidDataService.CompleteCovidDataFromStringAsync(_csvString);
+                    // get csv string
+                    var _completeCovidDataCsvString = await _githubService.GetFileAsStringAsync(Constants.COMPLETE_COVID_DATA_URL_PATH);
+                    var _vaersVaxAeCsvString = await _githubService.GetFileAsStringAsync(Constants.VAERS_VAX_AE_WITH_AGE_URL_PATH);
+                    Util.LogInformation("Got data from github");
+
+                    // create csv objects
+                    var _completeCovidDataCsvObject = await _covidDataService.CompleteCovidDataFromStringAsync(_completeCovidDataCsvString);
+                    var _vaersVaxAeCsvObject = await _covidDataService.VaersVaxAdverseEventsDataFromStringAsync(_vaersVaxAeCsvString);
+                    Util.LogInformation("Parsed CSV");
+                    Util.LogInformation("Starting to save to database");
 
                     // save to DB
-                    await _dbRepository.SaveRangeAsync(_csvObject);
-                }
+                    await _dbRepository.SaveRangeAsync(_completeCovidDataCsvObject, _vaersVaxAeCsvObject);
+                    Console.WriteLine($"{DateTime.UtcNow.ToString("dd/MM/yyyy H:mm:ss")} - [Information][Message 'Data was saved to database']");
+                } else Util.LogInformation("It is not time for an update");
+
 
                 await _dbRepository.FillMemory();
 
-                Console.WriteLine("Memory filled with covid data");
+                Util.LogInformation("Memory filled with covid data");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                Util.LogException(ex);
             }
         }
     }

@@ -294,6 +294,52 @@ namespace CovAnalytica.Server.Data.Migrations
 
                     b.ToTable("UpdateMetadataItems");
                 });
+
+            modelBuilder.Entity("CovAnalytica.Shared.Models.VaersVaxAdverseEvent", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Age")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AgeCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventCategory")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EventCategoryCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("EventsReported")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Percent")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VaccineDose")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VaccineDoseCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VaccineManufacturer")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VaccineManufacturerCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VaccineType")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("VaccineTypeCode")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("VaersVaxAdverseEventItems");
+                });
 #pragma warning restore 612, 618
         }
     }

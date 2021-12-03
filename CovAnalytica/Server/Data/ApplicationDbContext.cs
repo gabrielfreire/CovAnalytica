@@ -11,6 +11,7 @@ namespace CovAnalytica.Server.Data
         public DbSet<CompleteCovidData> CompleteCovidDataItems { get; set; }
         // Totals per country data
         public DbSet<SelectionCovidData> SelectionCovidDataItems { get; set; }
+        public DbSet<VaersVaxAdverseEvent> VaersVaxAdverseEventItems { get; set; }
         public DbSet<UpdateMetadata> UpdateMetadataItems { get; set; }
     }
 }

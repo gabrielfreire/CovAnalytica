@@ -17,13 +17,13 @@ namespace Tests.Data
     {
         private IDatabaseRepository? _dataRepository;
         private IGithubService? _githubService;
-        private ICovidDataCSVService? _csvService;
+        private ICSVService? _csvService;
 
         [OneTimeSetUp]
         public void Setup()
         {
             _githubService = _scopeFactory?.CreateScope().ServiceProvider.GetService<IGithubService>();
-            _csvService = _scopeFactory?.CreateScope().ServiceProvider.GetService<ICovidDataCSVService>();
+            _csvService = _scopeFactory?.CreateScope().ServiceProvider.GetService<ICSVService>();
             _dataRepository = _scopeFactory?.CreateScope().ServiceProvider.GetService<IDatabaseRepository>();
         }
 
@@ -44,9 +44,14 @@ namespace Tests.Data
             if (_csvService == null) return;
 
             var _completeDataListAsString = await _githubService.GetFileAsStringAsync(Constants.COMPLETE_COVID_DATA_URL_PATH);
+            var _vaersVaxAEAsString = await _githubService.GetFileAsStringAsync(Constants.VAERS_VAX_AE_WITH_AGE_URL_PATH);
+
             var _completeDataList = await _csvService.CompleteCovidDataFromStringAsync(_completeDataListAsString);
+            var _vaersVaxAEList = await _csvService.VaersVaxAdverseEventsDataFromStringAsync(_vaersVaxAEAsString);
             
-            await _dataRepository.SaveRangeAsync(_completeDataList.Where(c => c.PeopleFullyVaccinatedPerHundred != null).Take(5).ToList());
+            await _dataRepository.SaveRangeAsync(
+                _completeDataList.Where(c => c.PeopleFullyVaccinatedPerHundred != null).Take(5).ToList(), 
+                _vaersVaxAEList.Take(5).ToList());
 
             (await _dataRepository.IsItTimeToUpdate()).Should().BeFalse();
 

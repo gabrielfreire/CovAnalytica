@@ -11,6 +11,7 @@ namespace CovAnalytica.Shared.Models
         public int Skip { get; set; } = 0;
         public int Count { get; set; } = 0;
         public Dictionary<string, object> PropertyMap { get; set; } = new Dictionary<string, object>();
+        public List<string> SelectList { get; set; } = new List<string>();
         
         public static QueryParams FromQueries(IReadOnlyList<Tuple<string, string>> queries)
         {
@@ -25,6 +26,16 @@ namespace CovAnalytica.Shared.Models
                         break;
                     case "count":
                         _queryParams.Count = int.Parse(query.Item2);
+                        break;
+                    case "select":
+                        if (!string.IsNullOrWhiteSpace(query.Item2))
+                        {
+                            var _columns = query.Item2.Split(',');
+                            if (_columns.Length > 0)
+                            {
+                                _queryParams.SelectList.AddRange(_columns.ToList());
+                            }
+                        }
                         break;
                     default:
                         _queryParams.PropertyMap.Add(query.Item1, query.Item2);

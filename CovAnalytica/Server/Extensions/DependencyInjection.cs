@@ -15,8 +15,9 @@ namespace CovAnalytica.Server.Extensions
         {
             services.AddHttpClient();
             services.AddTransient<IGithubService, GithubService>();
-            services.AddTransient<ICovidDataCSVService, CovidDataCSVService>();
-            services.AddTransient<IQueryService, QueryService>();
+            services.AddTransient<ICSVService, CSVService>();
+            services.AddTransient<ICovidDataQueryService, CovidDataQueryService>();
+            services.AddTransient<IVaersDataQueryService, VaersDataQueryService>();
             services.AddScoped<IDatabaseRepository, DatabaseRepository>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -25,6 +26,7 @@ namespace CovAnalytica.Server.Extensions
 
             services.AddSingleton<IMemoryStorage<CompleteCovidData>, TimeseriesDataMemoryStorage>();
             services.AddSingleton<IMemoryStorage<SelectionCovidData>, TotalsPerCountryDataMemoryStorage>();
+            services.AddSingleton<IMemoryStorage<VaersVaxAdverseEvent>, VaersVaxAdverseEventsMemoryStorage>();
 
             services.AddSingleton<BackgroundTasks>();
             services.AddSingleton<IHostedService>(sp => sp.GetService<BackgroundTasks>());

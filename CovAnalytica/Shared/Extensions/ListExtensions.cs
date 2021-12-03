@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,5 +77,65 @@ namespace CovAnalytica.Shared.Extensions
                              };
             return _queryable.ToList();
         }
+
+        public static IQueryable<T> BuildQuery<T>(
+            this List<T> list, 
+            List<PropertyInformation> propertyInformations,
+            List<string> selects,
+            bool orderByAscendent,
+            int skip = 0, int count = 0)
+        {
+            var _queryable = list.AsQueryable();
+            if (_queryable.Any())
+            {
+
+                var _criteriasSb = new StringBuilder();
+                var _selectSb = new StringBuilder();
+
+                foreach (var property in propertyInformations)
+                {
+                    if (property.Value == null)
+                        continue;
+
+                    if (_criteriasSb.Length > 0)
+                    {
+                        _criteriasSb.Append(@$" AND it.{property.Name} = ""{property.Value}""");
+                    }
+                    else
+                    {
+                        _criteriasSb.Append(@$"it.{property.Name} = ""{property.Value}""");
+                    }
+                }
+
+                if (selects.Count > 0)
+                {
+                    _selectSb.Append("new(");
+                    _selectSb.Append(string.Join(",", selects.Select(s => $"it.{s}")));
+                    _selectSb.Append(")");
+                }
+
+                if (_criteriasSb.Length > 0)
+                {
+                    _queryable = _queryable.Where(_criteriasSb.ToString());
+                }
+
+                if (orderByAscendent)
+                {
+                    _queryable = _queryable.OrderBy("it.Date");
+                }
+                else
+                {
+                    _queryable = _queryable.OrderByDescending(it => "it.Date");
+                }
+
+                _queryable = _queryable.Skip(skip);
+
+                if (count > 0)
+                    _queryable = _queryable.Take(count);
+
+            }
+            return _queryable;
+        }
     }
+    
 }
