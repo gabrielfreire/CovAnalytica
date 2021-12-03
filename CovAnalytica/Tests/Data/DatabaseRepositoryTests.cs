@@ -32,10 +32,12 @@ namespace Tests.Data
         {
             //reset database
             if (_dataRepository == null) return;
-            await _dataRepository.DeleteAllCompleteCovidDataAsync();
-            await _dataRepository.DeleteAllSelectionCovidDataAsync();
-            await _dataRepository.DeleteVaersVaxAEDataAsync();
-            await _dataRepository.DeleteAllUpdateMarkersAsync();
+            _dataRepository.DeleteAllCompleteCovidDataAsync();
+            _dataRepository.DeleteAllSelectionCovidDataAsync();
+            _dataRepository.DeleteVaersVaxAEDataAsync();
+            _dataRepository.DeleteAllUpdateMarkersAsync();
+
+            await _dataRepository.SaveChangesAsync();
         }
 
         [Test, Order(1)]

@@ -16,13 +16,14 @@ namespace CovAnalytica.Shared.Interfaces
         /// <returns></returns>
         Task SaveRangeAsync(ICollection<CompleteCovidData> completeCovidDataEntities, 
             ICollection<VaersVaxAdverseEvent> vaersVaxAdverseEventEntities);
-        Task DeleteAllSelectionCovidDataAsync();
-        Task DeleteAllCompleteCovidDataAsync();
-        Task DeleteVaersVaxAEDataAsync();
-        Task DeleteAllUpdateMarkersAsync();
+        void DeleteAllSelectionCovidDataAsync();
+        void DeleteAllCompleteCovidDataAsync();
+        void DeleteVaersVaxAEDataAsync();
+        void DeleteAllUpdateMarkersAsync();
         Task SaveUpdateMarker(UpdateMetadata updateMetadata);
         Task<bool> IsItTimeToUpdate();
         Task<bool> IsDataAvailableInMemory();
         Task FillMemory();
+        Task SaveChangesAsync();
     }
 }

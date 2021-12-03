@@ -34,12 +34,15 @@ namespace CovAnalytica.Server.Data
             ICollection<CompleteCovidData> completeCovidDataEntities, 
             ICollection<VaersVaxAdverseEvent> vaersVaxAdverseEventEntities)
         {
-            await DeleteAllCompleteCovidDataAsync();
-            await DeleteAllSelectionCovidDataAsync();
+            DeleteAllCompleteCovidDataAsync();
+            DeleteAllSelectionCovidDataAsync();
+            DeleteVaersVaxAEDataAsync();
 
             // set new update marker
             await SaveUpdateMarker(new UpdateMetadata() { LastUpdated = DateTime.UtcNow });
-            
+
+            await SaveChangesAsync();
+
             _scopedTimeseriesCache = completeCovidDataEntities;
             _scopedTotalsPerCountryCache = completeCovidDataEntities.ToSelectionCovidData();
             _scopedVaersVaxAdverseEventsCache = vaersVaxAdverseEventEntities;
@@ -48,47 +51,23 @@ namespace CovAnalytica.Server.Data
             await _saveTimeseriesData(_scopedTimeseriesCache);
             await _saveTotalsPerCountryData(_scopedTotalsPerCountryCache);
             await _saveVaersVaxAEData(_scopedVaersVaxAdverseEventsCache);
+
+            await SaveChangesAsync();
         }
 
-        private async Task _saveTimeseriesData(ICollection<CompleteCovidData> entities)
-        {
-            await _dbContext.CompleteCovidDataItems.AddRangeAsync(entities);
-            await _dbContext.SaveChangesAsync(CancellationToken.None);
-        }
-        private async Task _saveTotalsPerCountryData(ICollection<SelectionCovidData> entities)
-        {
-            await _dbContext.SelectionCovidDataItems.AddRangeAsync(entities);
-            await _dbContext.SaveChangesAsync(CancellationToken.None);
-        }
-        private async Task _saveVaersVaxAEData(ICollection<VaersVaxAdverseEvent> entities)
-        {
-            await _dbContext.VaersVaxAdverseEventItems.AddRangeAsync(entities);
-            await _dbContext.SaveChangesAsync(CancellationToken.None);
-        }
+        public async Task SaveUpdateMarker(UpdateMetadata updateMetadata) => await _dbContext.UpdateMetadataItems.AddAsync(updateMetadata);
 
-        public async Task DeleteAllCompleteCovidDataAsync()
-        {
-            _dbContext.RemoveRange(_dbContext.CompleteCovidDataItems);
-            await _dbContext.SaveChangesAsync(CancellationToken.None);
-        }
+        private Task _saveTimeseriesData(ICollection<CompleteCovidData> entities) => _dbContext.CompleteCovidDataItems.AddRangeAsync(entities);
+        private Task _saveTotalsPerCountryData(ICollection<SelectionCovidData> entities) => _dbContext.SelectionCovidDataItems.AddRangeAsync(entities);
+        private Task _saveVaersVaxAEData(ICollection<VaersVaxAdverseEvent> entities) => _dbContext.VaersVaxAdverseEventItems.AddRangeAsync(entities);
 
-        public async Task DeleteAllSelectionCovidDataAsync()
-        {
-            _dbContext.RemoveRange(_dbContext.SelectionCovidDataItems);
-            await _dbContext.SaveChangesAsync(CancellationToken.None);
-        }
+
+        public void DeleteAllCompleteCovidDataAsync() => _dbContext.RemoveRange(_dbContext.CompleteCovidDataItems);
+        public void DeleteAllSelectionCovidDataAsync() => _dbContext.RemoveRange(_dbContext.SelectionCovidDataItems);
+        public void DeleteVaersVaxAEDataAsync() => _dbContext.RemoveRange(_dbContext.VaersVaxAdverseEventItems);
+        public void DeleteAllUpdateMarkersAsync() => _dbContext.RemoveRange(_dbContext.UpdateMetadataItems);
+        public Task SaveChangesAsync() => _dbContext.SaveChangesAsync(CancellationToken.None);
         
-        public async Task DeleteVaersVaxAEDataAsync()
-        {
-            _dbContext.RemoveRange(_dbContext.VaersVaxAdverseEventItems);
-            await _dbContext.SaveChangesAsync(CancellationToken.None);
-        }
-
-        public async Task DeleteAllUpdateMarkersAsync()
-        {
-            _dbContext.RemoveRange(_dbContext.UpdateMetadataItems);
-            await _dbContext.SaveChangesAsync(CancellationToken.None);
-        }
 
         public async Task FillMemory()
         {
@@ -108,12 +87,11 @@ namespace CovAnalytica.Server.Data
             }
         }
 
-        public async Task<bool> IsDataAvailableInMemory()
-        {
-            return (await _timeseriesCovidDataMemoryStorage.HasDataBeenLoaded()) && 
+        public async Task<bool> IsDataAvailableInMemory() => 
+                (await _timeseriesCovidDataMemoryStorage.HasDataBeenLoaded()) && 
                 (await _totalsPerCountryCovidDataMemoryStorage.HasDataBeenLoaded()) &&
                 (await _vaersVaxAdverseEventsMemoryStorage.HasDataBeenLoaded());
-        }
+        
 
         public async Task<bool> IsItTimeToUpdate()
         {
@@ -135,10 +113,6 @@ namespace CovAnalytica.Server.Data
             return true;
         }
 
-        public async Task SaveUpdateMarker(UpdateMetadata updateMetadata)
-        {
-            await _dbContext.UpdateMetadataItems.AddAsync(updateMetadata);
-            await _dbContext.SaveChangesAsync(CancellationToken.None);
-        }
+            
     }
 }
