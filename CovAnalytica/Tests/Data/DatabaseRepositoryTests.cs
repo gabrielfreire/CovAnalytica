@@ -31,8 +31,10 @@ namespace Tests.Data
         public async Task TearDown()
         {
             //reset database
+            if (_dataRepository == null) return;
             await _dataRepository.DeleteAllCompleteCovidDataAsync();
             await _dataRepository.DeleteAllSelectionCovidDataAsync();
+            await _dataRepository.DeleteVaersVaxAEDataAsync();
             await _dataRepository.DeleteAllUpdateMarkersAsync();
         }
 
