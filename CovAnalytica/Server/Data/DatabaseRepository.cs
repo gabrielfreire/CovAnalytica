@@ -37,10 +37,6 @@ namespace CovAnalytica.Server.Data
             DeleteAllCompleteCovidDataAsync();
             DeleteAllSelectionCovidDataAsync();
             DeleteVaersVaxAEDataAsync();
-
-            // set new update marker
-            await SaveUpdateMarker(new UpdateMetadata() { LastUpdated = DateTime.UtcNow });
-
             await SaveChangesAsync();
 
             _scopedTimeseriesCache = completeCovidDataEntities;
@@ -51,6 +47,9 @@ namespace CovAnalytica.Server.Data
             await _saveTimeseriesData(_scopedTimeseriesCache);
             await _saveTotalsPerCountryData(_scopedTotalsPerCountryCache);
             await _saveVaersVaxAEData(_scopedVaersVaxAdverseEventsCache);
+
+            // set new update marker
+            await SaveUpdateMarker(new UpdateMetadata() { LastUpdated = DateTime.UtcNow });
 
             await SaveChangesAsync();
         }

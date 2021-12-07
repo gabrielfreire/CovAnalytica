@@ -1,0 +1,21 @@
+﻿@namespace CovAnalytica.Client.Components
+
+<ApexChart @ref="_apexChart" 
+    TItem="DataItem" 
+    XAxisType="XAxisType.Datetime"
+    Title="@Title" Options="options">
+        @foreach(var dataset in _datasets)
+        {
+        
+            <ApexPointSeries TItem="DataItem"
+                Items="@dataset.Items"
+                Name="@dataset.Title"
+                SeriesType="SeriesType.Line"
+                XValue="@(e => e.Date)"
+                YValue="@(e => e.Value)"
+                YAggregate="@(e => e.Sum(e => e.Value))"
+                OrderByDescending="e=>e.X" 
+                Stroke="@(new ApexCharts.SeriesStroke { Width = dataset.StrokeWidth, Color = dataset.StrokeColor })"/>
+        }
+
+</ApexChart>

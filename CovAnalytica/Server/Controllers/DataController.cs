@@ -36,17 +36,18 @@ namespace CovAnalytica.Server.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        [Route("totals-per-country")]
-        public async Task<ActionResult> ListTotalsPerCountryCovidData(
-            [FromQuery] string? selects,
-            [FromQuery] string? Continent,
-            [FromQuery] string? Location,
-            [FromQuery] int? skip = 0,
-            [FromQuery] int? count = 0
-            )
+        [Route("countries")]
+        public async Task<ActionResult> ListAllCountries()
         {
-            var _queryParams = QueryParams.FromQueries(GetQueriesForSearch());
-            return Ok(await _covidQueryService.ListTotalsPerCountryWithQueryParamsAsync(_queryParams, false));
+            return Ok(await _covidQueryService.ListAllCountriesAsync());
+        }
+
+        [HttpGet]
+        [Produces("application/json")]
+        [Route("continents")]
+        public async Task<ActionResult> ListAllContinents()
+        {
+            return Ok(await _covidQueryService.ListAllContinentsAsync());
         }
 
         [HttpGet]

@@ -55,6 +55,9 @@ namespace CovAnalytica.Server.Background
             {
                 if (await _dbRepository.IsItTimeToUpdate())
                 {
+                    await _dbRepository.FillMemory();
+                    Util.LogInformation("Memory filled with covid data before update");
+
                     Util.LogInformation("It is time for an update");
 
                     // get csv string

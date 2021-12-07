@@ -2,6 +2,48 @@
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<DashboardGrid Style="margin-top: 40px">
+	<CellContent>
 
-Welcome to your new app.
+		<DashboardCell CellType="@CellType.OneThirdScreen">
+			<h5>Cell 1</h5>
+		</DashboardCell>
+		<DashboardCell CellType="@CellType.OneThirdScreen">
+			<h5>Cell 2</h5>
+		</DashboardCell>
+		<DashboardCell CellType="@CellType.FullScreen">
+			<MudGrid>
+				<MudItem xs="10" md="6">
+
+					<MudAutocomplete Label="World countries" @bind-Value="selectedCountry"
+									 SearchFunc="@SearchAsync" Immediate="true" ResetValueOnEmptyText="true"
+									 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="MudBlazor.Color.Primary"/>
+				</MudItem>
+				<MudItem xs="2" md="4">
+					<MudIconButton Variant="Variant.Filled" Icon="@Icons.Material.Filled.Add" OnClick="@(async () => await AddDatasetsAsync(selectedCountry))"/>
+				</MudItem>
+				<MudItem xs="12">
+					<MudChipSet AllClosable="true" OnClose="OnChipClosed">
+						@foreach (var value in addedCountries)
+						{
+							<MudChip Text="@value"></MudChip>
+						}
+					</MudChipSet>
+				</MudItem>
+			</MudGrid>
+		</DashboardCell>
+		<DashboardCell CellType="@CellType.HalfScreen">
+			<DeathPerMillionTimeseriesLineChart @ref="deathPMChart"/>
+
+		</DashboardCell>
+		<DashboardCell CellType="@CellType.HalfScreen">
+			<TotalCasesTimeseriesLineChart @ref="totalCasesChart"/>
+
+		</DashboardCell>
+		<DashboardCell CellType="@CellType.HalfScreen">
+			<TotalVaccinationsPerHundredLineChart @ref="totalVaccChart"/>
+
+		</DashboardCell>
+	</CellContent>
+
+</DashboardGrid>

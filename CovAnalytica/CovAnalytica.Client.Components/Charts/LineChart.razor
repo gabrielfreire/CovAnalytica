@@ -1,0 +1,30 @@
+﻿@namespace CovAnalytica.Client.Components
+
+<RadzenChart>
+    @foreach(var dataset in _datasets)
+    {
+        <RadzenLineSeries Smooth="false" 
+            Data="@dataset.Items" 
+            Title="@dataset.Title" 
+            LineType="LineType.Solid" 
+            CategoryProperty="Date" 
+            ValueProperty="Value">
+            @*<RadzenMarkers MarkerType="MarkerType.Square" />*@
+        </RadzenLineSeries>
+    }
+    <RadzenCategoryAxis Padding="CategoryAxisPadding" FormatString="@CategoryAxisFormatString" />
+    @if (ValueFormatter != null)
+    {
+        <RadzenValueAxis Formatter="@ValueFormatter">
+            <RadzenGridLines Visible="true" />
+            <RadzenAxisTitle Text="@YAxisLabel" />
+        </RadzenValueAxis>
+    } else
+    {
+        <RadzenValueAxis >
+            <RadzenGridLines Visible="true" />
+            <RadzenAxisTitle Text="@YAxisLabel" />
+        </RadzenValueAxis>
+        
+    }
+</RadzenChart>
