@@ -16,34 +16,55 @@ namespace CovAnalytica.Shared.Services
         private IMemoryStorage<CompleteCovidData> _completeCovidDataMemoryStorage;
         private IMemoryStorage<SelectionCovidData> _selectionCovidDataMemoryStorage;
 
-        public CovidDataQueryService(
-            IMemoryStorage<CompleteCovidData> completeCovidDataMemoryStorage,
-            IMemoryStorage<SelectionCovidData> selectionCovidDataMemoryStorage)
-        {
-            _completeCovidDataMemoryStorage = completeCovidDataMemoryStorage;
-            _selectionCovidDataMemoryStorage = selectionCovidDataMemoryStorage;
-        }
+        private IApplicationDbContext _dbContext;
 
-        public async Task<List<string>> ListAllContinentsAsync()
+		public CovidDataQueryService(
+			IMemoryStorage<CompleteCovidData> completeCovidDataMemoryStorage,
+			IMemoryStorage<SelectionCovidData> selectionCovidDataMemoryStorage, 
+            IApplicationDbContext dbContext)
+		{
+			_completeCovidDataMemoryStorage = completeCovidDataMemoryStorage;
+			_selectionCovidDataMemoryStorage = selectionCovidDataMemoryStorage;
+			_dbContext = dbContext;
+		}
+
+		public async Task<List<string>> ListAllContinentsAsync()
         {
+            IQueryable<CompleteCovidData> _queryable = default;
+
             if (await _completeCovidDataMemoryStorage.HasDataBeenLoaded())
             {
                 var _list = await _completeCovidDataMemoryStorage.GetAll();
-                var _queryable = _list.AsQueryable();
-                return _queryable.GroupBy(q => q.Continent).Select(q => q.Key).ToList();
+                _queryable = _list.AsQueryable();
             }
-            return new List<string>();
+            else
+            {
+                // fallback to db
+                _queryable = _dbContext.CompleteCovidDataItems.AsQueryable();
+            }
+
+            return _queryable.GroupBy(q => q.Continent).Select(q => q.Key).ToList();
         }
 
         public async Task<List<Country>> ListAllCountriesAsync()
         {
+            IQueryable<CompleteCovidData> _queryable = default;
+
             if (await _completeCovidDataMemoryStorage.HasDataBeenLoaded())
             {
                 var _list = await _completeCovidDataMemoryStorage.GetAll();
-                var _queryable = _list.AsQueryable();
-                return _queryable.GroupBy(q => q.Location).Select(q => new Country() { Name = q.Key, Continent = q.First().Continent, IsoCode = q.First().IsoCode }).ToList();
+                _queryable = _list.AsQueryable();
             }
-            return new List<Country>();
+            else
+            {
+                // fallback to db
+                _queryable = _dbContext.CompleteCovidDataItems.AsQueryable();
+            }
+
+            return _queryable
+                .GroupBy(q => q.Location)
+                .Select(q => new Country() { Name = q.Key, Continent = q.First().Continent, IsoCode = q.First().IsoCode })
+                .ToList();
         }
 
         public Task<List<dynamic>> ListTimeseriesDataWithQueryParamsAsync(QueryParams queryParams, bool orderByAscendent)
@@ -58,24 +79,41 @@ namespace CovAnalytica.Shared.Services
 
         private async Task<List<dynamic>> _searchComplete(QueryParams queryParams, bool orderByAscendent, int skip=0, int count=0)
         {
+            IQueryable _queryable = default;
             if (await _completeCovidDataMemoryStorage.HasDataBeenLoaded())
             {
                 var _list = await _completeCovidDataMemoryStorage.GetAll();
-                var _queryable = _list.BuildQuery(queryParams.GetPropertiesInformation(), queryParams.SelectList, orderByAscendent, skip, count);
-                return _queryable.ToDynamicList();
+                _queryable = _list.AsQueryable();
             }
-            return new List<dynamic>();
+            else
+			{
+                // fallback to db
+                _queryable = _dbContext.CompleteCovidDataItems.AsQueryable();
+            }
+
+            _queryable = _queryable.BuildQuery<CompleteCovidData>(queryParams.GetPropertiesInformation(), queryParams.SelectList, orderByAscendent, skip, count);
+
+            return _queryable.ToDynamicList();
+            
         }
 
         private async Task<List<dynamic>> _searchSelection(QueryParams queryParams, bool orderByAscendent, int skip=0, int count=0)
         {
+            IQueryable _queryable = default;
             if (await _selectionCovidDataMemoryStorage.HasDataBeenLoaded())
             {
                 var _list = await _selectionCovidDataMemoryStorage.GetAll();
-                var _queryable = _list.BuildQuery(queryParams.GetPropertiesInformation(), queryParams.SelectList, orderByAscendent, skip, count);
-                return _queryable.ToDynamicList();
+                _queryable = _list.AsQueryable();
             }
-            return new List<dynamic>();
+            else
+            {
+                // fallback to db
+                _queryable = _dbContext.SelectionCovidDataItems.AsQueryable();
+            }
+
+            _queryable = _queryable.BuildQuery<SelectionCovidData>(queryParams.GetPropertiesInformation(), queryParams.SelectList, orderByAscendent, skip, count);
+
+            return _queryable.ToDynamicList();
         }
 
         

@@ -26,7 +26,17 @@ namespace CovAnalytica.Client.Pages
             await base.OnInitializedAsync();
         }
 
-        async Task AddDatasetsAsync(string country)
+		protected override async Task OnAfterRenderAsync(bool firstRender)
+		{
+			await base.OnAfterRenderAsync(firstRender);
+            if (firstRender)
+			{
+                // default dataset
+                await AddDatasetsAsync("World");
+			}
+		}
+
+		async Task AddDatasetsAsync(string country)
         {
             if (string.IsNullOrWhiteSpace(country)) return;
             var c = await SDKService.ListTimeseriesByCountry(country, "Location,NewDeathsPerMillion,NewCasesPerMillion,TotalVaccinationsPerHundred,Date");

@@ -86,7 +86,17 @@ namespace CovAnalytica.Shared.Extensions
             int skip = 0, int count = 0)
         {
             var _queryable = (IQueryable) list.AsQueryable();
-            if (_queryable.Any())
+            return _queryable.BuildQuery<T>(propertyInformations, selects, orderByAscendent, skip, count);
+        }
+
+        public static IQueryable BuildQuery<T>(
+            this IQueryable queryable,
+            List<PropertyInformation> propertyInformations,
+            List<string> selects,
+            bool orderByAscendent,
+            int skip = 0, int count = 0)
+        {
+            if (queryable.Any())
             {
 
                 var _criteriasSb = new StringBuilder();
@@ -116,32 +126,32 @@ namespace CovAnalytica.Shared.Extensions
 
                 if (_criteriasSb.Length > 0)
                 {
-                    _queryable = _queryable.Where(_criteriasSb.ToString());
+                    queryable = queryable.Where(_criteriasSb.ToString());
                 }
 
                 if (typeof(T).GetProperty("Date") != null)
                 {
                     if (orderByAscendent)
                     {
-                        _queryable = _queryable.OrderBy("it.Date ASC");
+                        queryable = queryable.OrderBy("it.Date ASC");
                     }
                     else
                     {
-                        _queryable = _queryable.OrderBy("it.Date DESC");
+                        queryable = queryable.OrderBy("it.Date DESC");
                     }
                 }
 
-                _queryable = _queryable.Skip(skip);
+                queryable = queryable.Skip(skip);
 
                 if (count > 0)
-                    _queryable = _queryable.Take(count);
+                    queryable = queryable.Take(count);
 
                 if (_selectSb.Length > 0)
-                    _queryable = _queryable.Select(_selectSb.ToString());
-                
+                    queryable = queryable.Select(_selectSb.ToString());
+
 
             }
-            return _queryable;
+            return queryable;
         }
     }
     

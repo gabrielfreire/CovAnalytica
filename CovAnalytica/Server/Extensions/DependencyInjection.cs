@@ -24,6 +24,8 @@ namespace CovAnalytica.Server.Extensions
                 options.UseSqlite("Filename=coviddata.db", 
                     options => options.MigrationsAssembly(Assembly.GetExecutingAssembly().FullName)));
 
+            services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+
             services.AddSingleton<IMemoryStorage<CompleteCovidData>, TimeseriesDataMemoryStorage>();
             services.AddSingleton<IMemoryStorage<SelectionCovidData>, TotalsPerCountryDataMemoryStorage>();
             services.AddSingleton<IMemoryStorage<VaersVaxAdverseEvent>, VaersVaxAdverseEventsMemoryStorage>();
