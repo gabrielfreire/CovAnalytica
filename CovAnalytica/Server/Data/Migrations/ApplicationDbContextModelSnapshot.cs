@@ -112,6 +112,12 @@ namespace CovAnalytica.Server.Data.Migrations
                     b.Property<decimal?>("NewDeathsPerMillion")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal?>("NewPeopleVaccinatedSmoothed")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("NewPeopleVaccinatedSmoothedPerHundred")
+                        .HasColumnType("TEXT");
+
                     b.Property<decimal?>("NewTests")
                         .HasColumnType("TEXT");
 
@@ -119,6 +125,9 @@ namespace CovAnalytica.Server.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("NewVaccinations")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("NewVaccinationsSmoothedPerMillion")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal?>("PeopleFullyVaccinated")

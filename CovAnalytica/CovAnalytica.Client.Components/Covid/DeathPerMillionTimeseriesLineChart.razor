@@ -2,8 +2,8 @@
 
 <MudGrid>
 	<MudItem xs="12">
-		<div style="@($"display: {(addedCountries.Count > 0 ? "block" : "none")}")">
-			<ApexLineChart @ref="chart" Title="COVID-19 Deaths per million" YAxisLabel="Deaths Per Million"></ApexLineChart>
+		<div style="@($"display: {(addedCountries.Count > 0 ? "flex" : "none")}")">
+			<ApexLineChart @bind-Visible="@Visible" @ref="chart" Title="COVID-19 Deaths per million" YAxisLabel="Deaths Per Million"></ApexLineChart>
 		</div>
 		<MudText Typo="Typo.body1" Style="@($"display: {(addedCountries.Count > 0 ? "none" : "block")}")">Add countries to build a chart...</MudText>
 	</MudItem>

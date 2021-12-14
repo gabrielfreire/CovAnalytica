@@ -62,6 +62,9 @@ namespace CovAnalytica.Shared.Models
         public decimal? PeopleFullyVaccinated { get; set; }
         public decimal? TotalBoosters { get; set; }
         public decimal? NewVaccinations { get; set; }
+        public decimal? NewVaccinationsSmoothedPerMillion { get; set; }
+        public decimal? NewPeopleVaccinatedSmoothed { get; set; }
+        public decimal? NewPeopleVaccinatedSmoothedPerHundred { get; set; }
         public decimal? TotalVaccinationsPerHundred { get; set; }
         public decimal? PeopleVaccinatedPerHundred { get; set; }
         public decimal? PeopleFullyVaccinatedPerHundred { get; set; }

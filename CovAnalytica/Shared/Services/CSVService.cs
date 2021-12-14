@@ -69,6 +69,9 @@ namespace CovAnalytica.Shared.Services
                 var peopleFullyVaccinatedIdx = csv.GetOrdinal("people_fully_vaccinated");
                 var totalBoostersIdx = csv.GetOrdinal("total_boosters");
                 var newVaccinationsIdx = csv.GetOrdinal("new_vaccinations");
+                var newVaccinationsSmoothedPerMillionIdx = csv.GetOrdinal("new_vaccinations_smoothed_per_million");
+                var newPeopleVaccinatedSmoothedIdx = csv.GetOrdinal("new_people_vaccinated_smoothed");
+                var newPeopleVaccinatedSmoothedPerHundredIdx = csv.GetOrdinal("new_people_vaccinated_smoothed_per_hundred");
                 var totalVaccinationsPerHundredIdx = csv.GetOrdinal("total_vaccinations_per_hundred");
                 var peopleVaccinatedPerHundredIdx = csv.GetOrdinal("people_vaccinated_per_hundred");
                 var peopleFullyVaccinatedPerHundredIdx = csv.GetOrdinal("people_fully_vaccinated_per_hundred");
@@ -129,9 +132,12 @@ namespace CovAnalytica.Shared.Services
                     var peopleFullyVaccinatedValue = csv.GetString(peopleFullyVaccinatedIdx);
                     var totalBoostersValue = csv.GetString(totalBoostersIdx);
                     var newVaccinationsValue = csv.GetString(newVaccinationsIdx);
+                    var newVaccinationsSmoothedPerMillionValue = csv.GetString(newVaccinationsSmoothedPerMillionIdx);
+                    var newPeopleVaccinatedSmoothedValue = csv.GetString(newPeopleVaccinatedSmoothedIdx);
                     var totalVaccinationsPerHundredValue = csv.GetString(totalVaccinationsPerHundredIdx);
                     var peopleVaccinatedPerHundredValue = csv.GetString(peopleVaccinatedPerHundredIdx);
                     var peopleFullyVaccinatedPerHundredValue = csv.GetString(peopleFullyVaccinatedPerHundredIdx);
+                    var newPeopleVaccinatedSmoothedPerHundredValue = csv.GetString(newPeopleVaccinatedSmoothedPerHundredIdx);
                     var totalBoostersPerHundredValue = csv.GetString(totalBoostersPerHundredIdx);
                     var stringencyIndexValue = csv.GetString(stringencyIndexIdx);
                     var populationValue = csv.GetString(populationIdx);
@@ -190,6 +196,9 @@ namespace CovAnalytica.Shared.Services
                         PeopleFullyVaccinated = string.IsNullOrWhiteSpace(peopleFullyVaccinatedValue) ? null : decimal.Parse(peopleFullyVaccinatedValue),
                         TotalBoosters = string.IsNullOrWhiteSpace(totalBoostersValue) ? null : decimal.Parse(totalBoostersValue),
                         NewVaccinations = string.IsNullOrWhiteSpace(newVaccinationsValue) ? null : decimal.Parse(newVaccinationsValue),
+                        NewVaccinationsSmoothedPerMillion = string.IsNullOrWhiteSpace(newVaccinationsSmoothedPerMillionValue) ? null : decimal.Parse(newVaccinationsSmoothedPerMillionValue),
+                        NewPeopleVaccinatedSmoothed = string.IsNullOrWhiteSpace(newPeopleVaccinatedSmoothedValue) ? null : decimal.Parse(newPeopleVaccinatedSmoothedValue),
+                        NewPeopleVaccinatedSmoothedPerHundred = string.IsNullOrWhiteSpace(newPeopleVaccinatedSmoothedPerHundredValue) ? null : decimal.Parse(newPeopleVaccinatedSmoothedPerHundredValue),
                         TotalVaccinationsPerHundred = string.IsNullOrWhiteSpace(totalVaccinationsPerHundredValue) ? null : decimal.Parse(totalVaccinationsPerHundredValue),
                         PeopleVaccinatedPerHundred = string.IsNullOrWhiteSpace(peopleVaccinatedPerHundredValue) ? null : decimal.Parse(peopleVaccinatedPerHundredValue),
                         PeopleFullyVaccinatedPerHundred = string.IsNullOrWhiteSpace(peopleFullyVaccinatedPerHundredValue) ? null : decimal.Parse(peopleFullyVaccinatedPerHundredValue),

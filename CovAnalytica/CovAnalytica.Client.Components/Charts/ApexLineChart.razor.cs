@@ -19,6 +19,20 @@ namespace CovAnalytica.Client.Components
         public string XAxisLabel { get; set; } = "Date";
         [Parameter]
         public string Title { get; set; } = "Title";
+
+        private bool _isVisible = true;
+        [Parameter]
+        public bool Visible { get => _isVisible; set
+			{
+                if (_isVisible != value)
+				{
+                    _isVisible = value;
+                    VisibleChanged.InvokeAsync(_isVisible);
+				}
+			} 
+        }
+        [Parameter]
+        public EventCallback<bool> VisibleChanged { get; set; }
         [Parameter]
         public string Subtitle { get; set; } = string.Empty;
 
@@ -41,6 +55,7 @@ namespace CovAnalytica.Client.Components
                     OffsetY = 5
                 }
             };
+            //options.Markers = new Markers { Shape = ShapeEnum.Circle, Size = 1 };
             options.Yaxis = new List<YAxis>()
             {
                 new YAxis()

@@ -23,18 +23,24 @@
 						}
 					</MudChipSet>
 				</MudItem>
+				<MudItem xs="12">
+					<MudText>Chart visibility</MudText>
+					<MudCheckBox Label="Deaths Per Million" @bind-Checked="@VisibilityMap[typeof(DeathPerMillionTimeseriesLineChart)]"/>
+					<MudCheckBox Label="Total cases" @bind-Checked="@VisibilityMap[typeof(TotalCasesTimeseriesLineChart)]"/>
+					<MudCheckBox Label="Total vaccinations per hundred" @bind-Checked="@VisibilityMap[typeof(TotalVaccinationsPerHundredLineChart)]"/>
+				</MudItem>
 			</MudGrid>
 		</DashboardCell>
 		<DashboardCell CellType="@CellType.HalfScreen">
-			<DeathPerMillionTimeseriesLineChart @ref="deathPMChart"/>
+			<DeathPerMillionTimeseriesLineChart @bind-Visible="@VisibilityMap[typeof(DeathPerMillionTimeseriesLineChart)]" @ref="deathPMChart"/>
 
 		</DashboardCell>
 		<DashboardCell CellType="@CellType.HalfScreen">
-			<TotalCasesTimeseriesLineChart @ref="totalCasesChart"/>
+			<TotalCasesTimeseriesLineChart @bind-Visible="@VisibilityMap[typeof(TotalCasesTimeseriesLineChart)]" @ref="totalCasesChart"/>
 
 		</DashboardCell>
 		<DashboardCell CellType="@CellType.HalfScreen">
-			<TotalVaccinationsPerHundredLineChart @ref="totalVaccChart"/>
+			<TotalVaccinationsPerHundredLineChart @bind-Visible="@VisibilityMap[typeof(TotalVaccinationsPerHundredLineChart)]" @ref="totalVaccChart"/>
 
 		</DashboardCell>
 	</CellContent>
