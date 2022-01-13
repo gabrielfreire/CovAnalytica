@@ -37,10 +37,15 @@ namespace CovAnalytica.Client.Components
         [Parameter]
         public EventCallback<bool> VisibleChanged { get; set; }
 
+        [Parameter]
+        public string Title { get; set; } = "Default Title";
+        [Parameter]
+        public string YAxisLabel { get; set; } = "Default Y Axis label";
+
         public Dataset BuildDataset(List<CompleteCovidData> covidDataList, string color=null)
         {
             var _dataset = new Dataset();
-            _dataset.Items = covidDataList.Where(it => it.NewDeathsPerMillion != null && it.NewDeathsPerMillion > 0)
+            _dataset.Items = covidDataList.Where(it => Object.Equals(it.GetType().GetProperty("").GetValue(null), null) && it.NewDeathsPerMillion > 0)
                 .Select(it => new DataItem() { Date = it.Date, Value = decimal.Round(it.NewDeathsPerMillion ?? 0) }).ToArray();
             _dataset.Title = covidDataList.First().Location;
             _dataset.StrokeWidth = new Random().Next(1, 2);

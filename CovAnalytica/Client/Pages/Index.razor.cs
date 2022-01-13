@@ -16,15 +16,19 @@ namespace CovAnalytica.Client.Pages
         string selectedCountry = string.Empty;
 
         // charts
-        DeathPerMillionTimeseriesLineChart deathPMChart;
-        TotalCasesTimeseriesLineChart totalCasesChart;
-        TotalVaccinationsPerHundredLineChart totalVaccChart;
+        TimeseriesLinechart excessDeathChart;
+        TimeseriesLinechart excessDeathPMChart;
+        TimeseriesLinechart deathPMChart;
+        TimeseriesLinechart totalCasesChart;
+        TimeseriesLinechart totalVaccChart;
 
-        Dictionary<Type, bool> VisibilityMap = new Dictionary<Type, bool>()
+        Dictionary<string, bool> VisibilityMap = new Dictionary<string, bool>()
         {
-            { typeof(DeathPerMillionTimeseriesLineChart), true },
-            { typeof(TotalCasesTimeseriesLineChart), true },
-            { typeof(TotalVaccinationsPerHundredLineChart), true }
+            { "DeathPerMillion", true },
+            { "TotalCases", true },
+            { "TotalVaccinationsPerHundred", true },
+            { "ExcessDeathsPerMillion", true },
+            { "ExcessMortality", true }
         };
 
         protected override async Task OnInitializedAsync()
@@ -46,12 +50,14 @@ namespace CovAnalytica.Client.Pages
 		async Task AddDatasetsAsync(string country)
         {
             if (string.IsNullOrWhiteSpace(country)) return;
-            var c = await SDKService.ListTimeseriesByCountry(country, "Location,NewDeathsPerMillion,NewCasesPerMillion,NewVaccinationsSmoothedPerMillion,Date");
+            var c = await SDKService.ListTimeseriesByCountry(country, "Location,NewDeathsPerMillion,NewCasesPerMillion,NewVaccinationsSmoothedPerMillion,ExcessMortalityCumulativePerMillion,ExcessMortality,Date");
             if (c == null) return;
             if (c.Count == 0) return;
-            var _deathPMDataset = deathPMChart?.BuildDataset(c);
-            var _totalCasesDataset = totalCasesChart?.BuildDataset(c, _deathPMDataset?.StrokeColor);
-            var _totalVaccDataset = totalVaccChart?.BuildDataset(c, _deathPMDataset?.StrokeColor);
+            var _deathPMDataset = deathPMChart?.BuildDataset(c, "NewDeathsPerMillion");
+            var _totalCasesDataset = totalCasesChart?.BuildDataset(c, "NewCasesPerMillion", _deathPMDataset?.StrokeColor);
+            var _totalVaccDataset = totalVaccChart?.BuildDataset(c, "NewVaccinationsSmoothedPerMillion", _deathPMDataset?.StrokeColor);
+            var _excessDeathPMDataset = excessDeathPMChart?.BuildDataset(c, "ExcessMortalityCumulativePerMillion", _deathPMDataset?.StrokeColor);
+            var _excessDeathDataset = excessDeathChart?.BuildDataset(c, "ExcessMortality", _deathPMDataset?.StrokeColor);
 
             if (_deathPMDataset.Items.Length > 0)
                 deathPMChart?.AddDataset(_deathPMDataset);
@@ -61,6 +67,12 @@ namespace CovAnalytica.Client.Pages
             
             if (_totalVaccDataset.Items.Length > 0)
                 totalVaccChart?.AddDataset(_totalVaccDataset);
+
+            if (_excessDeathPMDataset.Items.Length > 0)
+                excessDeathPMChart?.AddDataset(_excessDeathPMDataset);
+
+            if (_excessDeathDataset.Items.Length > 0)
+                excessDeathChart?.AddDataset(_excessDeathDataset);
             
             addedCountries.Add(country);
             selectedCountry = string.Empty;
@@ -102,6 +114,7 @@ namespace CovAnalytica.Client.Pages
             deathPMChart?.RemoveDataset(country);
             totalCasesChart?.RemoveDataset(country);
             totalVaccChart?.RemoveDataset(country);
+            excessDeathPMChart?.RemoveDataset(country);
         }
 
     }
