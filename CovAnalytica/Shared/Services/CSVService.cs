@@ -227,7 +227,11 @@ namespace CovAnalytica.Shared.Services
                 }
             }
 
-            File.Delete(Constants.COMPLETE_COVID_DATA_FILE_PATH);
+            try
+            {
+                File.Delete(Constants.COMPLETE_COVID_DATA_FILE_PATH);
+            }
+            catch { }
 
             return _completeCovidDataList;
         }

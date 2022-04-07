@@ -2,6 +2,10 @@
 
 <PageTitle>Index</PageTitle>
 
+<MudOverlay Visible="_busy" DarkBackground="false" Absolute="true">
+    <MudProgressCircular Color="MudBlazor.Color.Primary" Indeterminate="true" Size="Size.Large" />
+</MudOverlay>
+
 <DashboardGrid Style="margin-top: 40px">
 	<CellContent>
 		<DashboardCell CellType="@CellType.FullScreen">
@@ -13,7 +17,7 @@
 									 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="MudBlazor.Color.Primary"/>
 				</MudItem>
 				<MudItem xs="2" md="4">
-					<MudIconButton Variant="Variant.Filled" Icon="@Icons.Material.Filled.Add" OnClick="@(async () => await AddDatasetsAsync(selectedCountry))"/>
+					<MudIconButton Variant="Variant.Filled" Icon="@Icons.Material.Filled.Add" OnClick="@(() => AddDatasetsAsync(selectedCountry))"/>
 				</MudItem>
 				<MudItem xs="12">
 					<MudChipSet AllClosable="true" OnClose="OnChipClosed">
@@ -25,32 +29,42 @@
 				</MudItem>
 				<MudItem xs="12">
 					<MudText>Chart visibility</MudText>
-					<MudCheckBox Label="Deaths Per Million" @bind-Checked="@VisibilityMap["DeathPerMillion"]"/>
+					<MudCheckBox Label="Deaths Per Million" @bind-Checked="@VisibilityMap["DeathsPerMillion"]"/>
 					<MudCheckBox Label="Total cases" @bind-Checked="@VisibilityMap["TotalCases"]"/>
-					<MudCheckBox Label="Total vaccinations per hundred" @bind-Checked="@VisibilityMap["TotalVaccinationsPerHundred"]"/>
-					<MudCheckBox Label="Excess deaths per million" @bind-Checked="@VisibilityMap["ExcessDeathsPerMillion"]"/>
+					<MudCheckBox Label="New people vaccinated" @bind-Checked="@VisibilityMap["NewPeopleVaccinated"]"/>
+					<MudCheckBox Label="People vaccinated" @bind-Checked="@VisibilityMap["PeopleVaccinated"]"/>
+					<MudCheckBox Label="Excess Mortality cumulative per million" @bind-Checked="@VisibilityMap["ExcessMortalityCumulativePerMillion"]"/>
+					<MudCheckBox Label="Excess Mortality cumulative" @bind-Checked="@VisibilityMap["ExcessMortalityCumulative"]"/>
 					<MudCheckBox Label="Excess Mortality" @bind-Checked="@VisibilityMap["ExcessMortality"]"/>
 				</MudItem>
 			</MudGrid>
 		</DashboardCell>
 		<DashboardCell CellType="@CellType.HalfScreen">
-			<TimeseriesLinechart @bind-Visible="@VisibilityMap["DeathPerMillion"]" @ref="deathPMChart" Title="COVID-19 Deaths per million" YAxisLabel="Deaths Per Million"/>
+			<TimeseriesLinechart @bind-Visible="@VisibilityMap["DeathsPerMillion"]" @ref="deathChart" Title="COVID-19 Deaths" YAxisLabel="Deaths"/>
 
 		</DashboardCell>
 		<DashboardCell CellType="@CellType.HalfScreen">
-			<TimeseriesLinechart @bind-Visible="@VisibilityMap["TotalCases"]" @ref="totalCasesChart" Title="COVID-19 Cases per million" YAxisLabel="Cases per million"/>
+			<TimeseriesLinechart @bind-Visible="@VisibilityMap["TotalCases"]" @ref="totalCasesChart" Title="COVID-19 Cases" YAxisLabel="Cases"/>
 
 		</DashboardCell>
 		<DashboardCell CellType="@CellType.HalfScreen">
-			<TimeseriesLinechart @bind-Visible="@VisibilityMap["TotalVaccinationsPerHundred"]" @ref="totalVaccChart" Title="COVID-19 Vaccinations per million" YAxisLabel="Vaccinations per million"/>
+			<TimeseriesLinechart @bind-Visible="@VisibilityMap["NewPeopleVaccinated"]" @ref="newVaccChart" Title="COVID-19 New people vaccinated" YAxisLabel="New people vaccinated"/>
 
 		</DashboardCell>
 		<DashboardCell CellType="@CellType.HalfScreen">
-			<TimeseriesLinechart @bind-Visible="@VisibilityMap["ExcessDeathsPerMillion"]" @ref="excessDeathPMChart" Title="COVID-19 Excess death per million" YAxisLabel="Excess death per million"/>
+			<TimeseriesLinechart @bind-Visible="@VisibilityMap["PeopleVaccinated"]" @ref="peopleVaccChart" Title="COVID-19 People Vaccinated" YAxisLabel="People Vaccinated"/>
 
 		</DashboardCell>
 		<DashboardCell CellType="@CellType.HalfScreen">
-			<TimeseriesLinechart @bind-Visible="@VisibilityMap["ExcessMortality"]" @ref="excessDeathChart" Title="COVID-19 Excess Mortality" YAxisLabel="Excess Mortality"/>
+			<TimeseriesLinechart @bind-Visible="@VisibilityMap["ExcessMortalityCumulativePerMillion"]" @ref="excessMortalityCulPMChart" Title="COVID-19 Excess mortality cumulative per million" YAxisLabel="Excess mortality cumulative per million"/>
+
+		</DashboardCell>
+		<DashboardCell CellType="@CellType.HalfScreen">
+			<TimeseriesLinechart @bind-Visible="@VisibilityMap["ExcessMortalityCumulative"]" @ref="excessMortalityCulChart" Title="COVID-19 Excess mortality cumulative" YAxisLabel="Excess mortality cumulative"/>
+
+		</DashboardCell>
+		<DashboardCell CellType="@CellType.HalfScreen">
+			<TimeseriesLinechart @bind-Visible="@VisibilityMap["ExcessMortality"]" @ref="excessMortalityChart" Title="COVID-19 Excess Mortality" YAxisLabel="Excess Mortality"/>
 
 		</DashboardCell>
 	</CellContent>

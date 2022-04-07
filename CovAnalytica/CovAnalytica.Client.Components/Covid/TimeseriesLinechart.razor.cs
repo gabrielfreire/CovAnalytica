@@ -40,7 +40,7 @@ namespace CovAnalytica.Client.Components
         [Parameter]
         public string YAxisLabel { get; set; } = "Default Y Axis label";
 
-        public Dataset BuildDataset(List<CompleteCovidData> covidDataList, string filterPropertyName, string color = null)
+        public Task<Dataset> BuildDataset(List<CompleteCovidData> covidDataList, string filterPropertyName, string color = null)
         {
             if (typeof(CompleteCovidData).GetProperty(filterPropertyName) == null)
                 throw new InvalidOperationException($"Property {filterPropertyName} in {nameof(CompleteCovidData)} type was not found");
@@ -53,19 +53,25 @@ namespace CovAnalytica.Client.Components
             _dataset.Title = covidDataList.First().Location;
             _dataset.StrokeWidth = new Random().Next(1, 2);
             _dataset.StrokeColor = color == null ? "".GetRandomHexColor() : color;
-            return _dataset;
+            return Task.FromResult(_dataset);
         }
         public void AddDataset(Dataset dataset)
         {
-            addedCountries.Add(dataset.Title);
-            chart?.AddDataset(dataset);
-            StateHasChanged();
+            _ = InvokeAsync(() =>
+            {
+                addedCountries.Add(dataset.Title);
+                chart?.AddDataset(dataset);
+                StateHasChanged();
+            });
         }
         public void RemoveDataset(string country)
         {
-            chart?.RemoveDataset(country);
-            addedCountries.Remove(country);
-            StateHasChanged();
+            _ = InvokeAsync(() =>
+            {
+                chart?.RemoveDataset(country);
+                addedCountries.Remove(country);
+                StateHasChanged();
+            });
         }
 
     }
